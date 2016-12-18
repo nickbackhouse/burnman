@@ -76,6 +76,7 @@ from . import minerals
 
 # central user tools
 from . import seismic
+from . import seismic3D
 from . import averaging_schemes
 from . import eos
 
