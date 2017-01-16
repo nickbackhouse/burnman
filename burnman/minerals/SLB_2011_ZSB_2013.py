@@ -14,6 +14,10 @@ from __future__ import absolute_import
 
 from .. import mineral_helpers as helpers
 from ..mineral import Mineral
+from ..solidsolution import SolidSolution
+from ..solutionmodel import *
+from ..processchemistry import read_masses, dictionarize_formula, formula_mass
+
 
 
 class stishovite (Mineral):
@@ -165,6 +169,7 @@ class fe_perovskite(Mineral):
             'err_eta_s_0': 1.0}
 
         Mineral.__init__(self)
+
 
 mg_bridgmanite = mg_perovskite
 fe_bridgmanite = fe_perovskite

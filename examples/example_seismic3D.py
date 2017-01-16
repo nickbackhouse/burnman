@@ -27,15 +27,23 @@ import burnman
 if __name__ == "__main__":
 
     # List of seismic 3D models
-    models = ['SEMUCBWM1_Lmax18']
-    for mod in models:
+    models = ['SEMUCBWM1_Lmax18','GyPSuM_Lmax18','S40RTS_Lmax18','TX2011_Lmax18','SAVANI_Lmax18']
+    
+
+    
+    for mod in models[:3]:
         model3D = burnman.seismic3D.Seismic3DModel(mod)
-
-
+        plt.title(mod)
+        depthrange = model3D.internal_depth_list(mindepth=400.e3, maxdepth=2800.e3)
+        plt.subplot(2,1,1)
         for i in range(101):
-            plt.plot(model3D.ref['depths'],model3D.percentile_profile('dVs',i),color='k',alpha=0.1)
-            plt.plot(model3D.ref['depths'],np.mean(model3D.ref['dVs'], axis=1),'r')
 
+            prof = model3D.percentile_profile('dVs',i, depth=2800.e3)
+            plt.plot(depthrange,prof.dv_s(depthrange),color='k',alpha=0.1)
+        
+        prof = model3D.location_profile(0,0)
+        plt.plot(depthrange,prof.dv_s(depthrange),color='r',alpha=1)
 
+        plt.subplot(2,1,2)
 
-    plt.show()
+        plt.show()

@@ -341,7 +341,7 @@ class SeismicTable(Seismic1DModel):
 class PREM(SeismicTable):
 
     """
-    Reads  PREM (1s) (input_seismic/prem.txt, :cite:`dziewonski1981`).
+    Reads  PREM (1s) (`_seismic/prem.txt, :cite:`dziewonski1981`).
     See also :class:`burnman.seismic.SeismicTable`.
     """
 
