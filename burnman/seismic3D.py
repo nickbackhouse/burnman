@@ -24,7 +24,7 @@ class Seismic3DModel(object):
         self.ref = np.load('../burnman/data/input_seismic/'+modelname+'.npy').item()
     
     
-    def location_profile(self, latitude, longitude, method = 'nearest'):
+    def location_profile(self, latitude=None, longitude=None, method = 'nearest'):
         if method == 'nearest':
             index = np.argmin(np.power(self.ref['lats']-latitude,2) + np.power(self.ref['lons']-longitude,2))
             print('returning profile for longitude = '+ str(self.ref['lons'][index]) + ' and latitude = ' + str(self.ref['lats'][index]))
@@ -42,16 +42,16 @@ class Seismic3DModel(object):
         #return SeismicProfile(self,sortedprofiles[0,index])
         
     def minimum_profile(self, variable,  depth = None, method = 'nearest'):
-        return percentile_profile(self, variable, 0, depth=depth, method=method)
+        return self.percentile_profile(variable, 0, depth=depth, method=method)
 
     def median_profile(self, variable,  depth = None, method = 'nearest'):
-        return percentile_profile(self, variable, 50, depth=depth, method=method)
+        return self.percentile_profile(variable, 50, depth=depth, method=method)
 
     def maximum_profile(self, variable,  depth = None, method = 'nearest'):
-        return percentile_profile(self, variable, 100, depth=depth, method=method)
+        return self.percentile_profile(variable, 100, depth=depth, method=method)
 
 
-    def one_depth_values(self, variable,  depth ):
+    def range_at_depth(self, variable,  depth ):
         depthind = np.argmin(np.abs(self.ref['depths']-depth))
         return self.ref[variable][depthind,:]
 
@@ -121,8 +121,7 @@ class SeismicProfile(Seismic1DModel):
 
     def radius(self, pressure):
 
-        radius = np.interp(pressure, self.table_pressure[
-                           ::-1], self.earth_radius - self.table_depth[::-1])
+        radius = np.interp(pressure, self.table_pressure[::-1], self.earth_radius - self.table_depth[::-1])
         return radius
 
     def _lookup(self, depth, value_table):
