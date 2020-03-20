@@ -10,6 +10,7 @@ from . import mie_grueneisen_debye as mgd
 from . import birch_murnaghan as bm
 from . import birch_murnaghan_4th as bm4
 from . import modified_tait as mt
+from . import brosh_calphad
 from . import dks_liquid
 from . import dks_solid
 from . import hp
@@ -21,15 +22,15 @@ from . import aa
 from .equation_of_state import EquationOfState
 
 class CombinedMineralMethod(object):
-    """Dummy class because CombinedMineral objects are derived 
-    from a mechanical SolidSolution. 
-    SolidSolution needs a method to call Mineral.set_state(), 
+    """Dummy class because CombinedMineral objects are derived
+    from a mechanical SolidSolution.
+    SolidSolution needs a method to call Mineral.set_state(),
     but a CombinedMineral should never have a method that
     is used for solid solutions."""
     def validate_parameters(self, params):
         pass
     pass
-            
+
 def create(method):
     """
     Creates an instance of an EquationOfState from a string,
@@ -62,6 +63,8 @@ def create(method):
             return mt.MT()
         elif method == "hp_tmt":
             return hp.HP_TMT()
+        elif method == "brosh_calphad":
+            return brosh_calphad.BroshCalphad()
         elif method == "cork":
             return cork.CORK()
         elif method == "dks_l":
