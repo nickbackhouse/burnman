@@ -307,11 +307,11 @@ class BroshCalphad(eos.EquationOfState):
 
     def calculate_transformed_parameters(self, params):
 
-        Z = {str(sl[0]): int(sl[1])
+        Z = {str(sl[0]): int(float(sl[1])*1000)
              for sl in [line.split() for line
                         in pkgutil.get_data('burnman',
-                                            'data/input_masses/atomic_numbers.dat').decode('ascii').split('\n')
-                        if len(line) > 0 and line[0] != '#']}
+                                            'data/input_masses/atomic_masses.dat').decode('ascii').split('\n')
+                        if len(line) > 0 and line[0] != '%']}
 
 
         nZs = [(n_at, float(Z[el])) for (el, n_at) in params['formula'].items()]
