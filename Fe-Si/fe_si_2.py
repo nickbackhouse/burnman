@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 import matplotlib
 import numpy as np
-#%matplotlib inline
+%matplotlib inline
 
 import burnman
 import burnman.minerals as minerals
@@ -147,6 +147,7 @@ plt.plot(high_ps/1.e9, hcp_liq_temperatures, color='blue',linestyle='dashed', la
 
 
 #this section just loads in my eutectic data
+print('put data files in your repository data directory and use relative paths so that this also works on other machines')
 file = open("/Users/nicholasbackhouse/Documents/MATLAB.nosync/Data Files/msciexp.txt")
 pressure = []
 temperature = []
@@ -169,6 +170,7 @@ t = [float(i) for i in temperature]
 t_err = [float(i) for i in temperatureerror]
 
 #plotting my data
+print('use plt.errorbar and plt.scatter to plot your data points')
 
 Tm0 = 1473
 def simonglatzel(P,A,C):
@@ -191,4 +193,8 @@ plt.plot(ps2,s,color='blue',linestyle='dotted')
 plt.legend()
 plt.ylabel('Temperature (K)')
 plt.xlabel('Pressure (GPa)')
+
+
+print('save to a relative path somewhere in your repository (maybe a figures directory)')
+print('you can also change the file format by appending the correct suffix to the path. pdfs are best for me, but if your report is in word, jpg might be best')
 plt.savefig('/Users/nicholasbackhouse/Documents/fesivsfe', dpi = 300)
