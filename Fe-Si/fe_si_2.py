@@ -75,6 +75,22 @@ liq = burnman.SolidSolution(name = 'disordered liq Fe-Si',
                           volume_interaction = [[0.0e3]])
 """
 
+def invariant_point(endmember_A, endmember_B, endmember_C, P_guess, T_guess):
+    """
+    For isochemical endmember calculations at fixed P or T,
+    we have one unknown (T or P) and one equation
+    (the gibbs free energies of the two phases must be equal).
+    """
+    def affinity(args):
+        P, T = args
+        for phase in [endmember_A, endmember_B, endmember_C]:
+            phase.set_state(P, T)
+        return [endmember_A.gibbs - endmember_B.gibbs,
+                endmember_A.gibbs - endmember_C.gibbs]
+
+    sol = root(affinity, [P_guess, T_guess])
+    return sol.x, sol.success
+
 def endmember_equilibrium_constant_P(P, endmember_A, endmember_B, T_guess):
     """
     For isochemical endmember calculations at fixed P or T,
@@ -105,46 +121,33 @@ def endmember_equilibrium_constant_T(T, endmember_A, endmember_B, P_guess):
 
 print(endmember_equilibrium_constant_P(100.e9,fcc_iron, liq_iron, 1800))
 
-#this is where my code begins, I thought the best way to approach it was to create two arrays across the 
+#this is where my code begins, I thought the best way to approach it was to create two arrays across the
 #PT range of the phase changes and iterate over them in parallel to create an array of temperature values.
 
 #first section is for the melting curve, I assume that if I'm going to extrapolate this to higher pressures
 #I'd need to calculate again for hcp-liq transition
 
-ps = np.linspace(0,100e9,101)
-ts = np.linspace(1800,3500,101)
 
-pt = zip(ps,ts)
+# Find the invariant point
+P_inv, T_inv = invariant_point(fcc_iron, hcp_iron, liq_iron, 100.e9, 3000.)[0]
 
-r = []
-for i in pt:
-    p = i[0]
-    t = i[1]
-    out = endmember_equilibrium_constant_P(p, fcc_iron, liq_iron ,t)
-    #print(p, t, out)
-    r.append(out[0])
-    
-#second section is for the fcc - hcp transition
+# Create pressure arrays above and below the invariant point
+low_ps = np.linspace(0, P_inv, 101)
+high_ps = np.linspace(P_inv, 200.e9, 101)
 
-ps2 = np.linspace(0,80e9,101)
-ts2 = np.linspace(1800,3400,101)
+# Find the transition temperatures for each transition
+fcc_liq_temperatures = [endmember_equilibrium_constant_P(p, fcc_iron, liq_iron, T_guess=2000.)[0] for p in low_ps]
+fcc_hcp_temperatures = [endmember_equilibrium_constant_P(p, fcc_iron, hcp_iron, T_guess=2000.)[0] for p in low_ps]
+hcp_liq_temperatures = [endmember_equilibrium_constant_P(p, hcp_iron, liq_iron, T_guess=2000.)[0] for p in high_ps]
 
-pt = zip(ps,ts)
+# Plot the transition pressures
+plt.plot(low_ps/1.e9, fcc_liq_temperatures, color='blue', label='FCC-liq')
+plt.plot(low_ps/1.e9, fcc_hcp_temperatures, color='blue',linestyle='dotted', label='FCC-HCP')
+plt.plot(high_ps/1.e9, hcp_liq_temperatures, color='blue',linestyle='dashed', label='HCP-liq')
 
-s = []
-for i in pt:
-    p = i[0]
-    t = i[1]
-    out = endmember_equilibrium_constant_P(p, fcc_iron, hcp_iron ,t)
-    
-    s.append(out[0])
-
-
-plt.plot(ps,r,color='blue')
-plt.plot(ps2,s,color='blue',linestyle='dotted')
 
 #this section just loads in my eutectic data
-
+print('put data files in your repository data directory and use relative paths so that this also works on other machines')
 file = open("/Users/nicholasbackhouse/Documents/MATLAB.nosync/Data Files/msciexp.txt")
 pressure = []
 temperature = []
@@ -167,10 +170,11 @@ t = [float(i) for i in temperature]
 t_err = [float(i) for i in temperatureerror]
 
 #plotting my data
+print('use plt.errorbar and plt.scatter to plot your data points')
 
 Tm0 = 1473
 def simonglatzel(P,A,C):
-    Tm = ((P/A)+1)**(1/C)*Tm0
+    Tm = ((P/A)+1.)**(1./C)*Tm0
     return Tm
 popt, pcov = curve_fit(simonglatzel, p, t)
 x = np.linspace(0,100,100)
@@ -186,7 +190,11 @@ plt.plot(ps2,s,color='blue',linestyle='dotted')
 
 #adding legend and stuff and saving it to my files, obviously you need to change the save location
 
-plt.legend(["This Study","Pure Iron","fcc - hcp boundary"])
+plt.legend()
 plt.ylabel('Temperature (K)')
 plt.xlabel('Pressure (GPa)')
+
+
+print('save to a relative path somewhere in your repository (maybe a figures directory)')
+print('you can also change the file format by appending the correct suffix to the path. pdfs are best for me, but if your report is in word, jpg might be best')
 plt.savefig('/Users/nicholasbackhouse/Documents/fesivsfe', dpi = 300)
