@@ -10,7 +10,7 @@ from burnman.mineral import Mineral
 from burnman.solidsolution import SolidSolution
 from burnman.solutionmodel import *
 from burnman.processchemistry import read_masses, dictionarize_formula, formula_mass
-
+from burnman.constants import Avogadro
 
 # Lacaze and Sundman (1991) suggest  0.5*Fe(nonmag) + 0.5*Si - 36380.6 + 2.22T
 class FeSi_B20 (Mineral): # WARNING, no magnetic properties to avoid screwing up Barin
@@ -91,78 +91,81 @@ class Si_diamond_A4 (Mineral):
             'equation_of_state': 'hp_tmt',
             'H_0': 0. , # Barin
             'S_0': 18.820 , # Barin
-            'V_0': 1.20588e-05 , # Hallstedt, 2007
+            'V_0': 1.2057e-05 , # Refit from Anzellini (2019)
             'Cp': [22.826, 0.003856857, -353888.416, -0.0596068], # Barin
             'a_0': 7.757256e-06 , # Fit to Roberts, 1981
-            'K_0': 101.e+9 , # Hu et al., 1986 (fit to V/V0 at 11.3 GPa)
-            'Kprime_0': 4.0 , #
-            'Kdprime_0': -4.0/101.e+9 , #
+            'K_0': 102.e9 , # Refit from Anzellini (2019)
+            'Kprime_0': 3.3 , # [fixed]
+            'Kdprime_0': -3.3/102e+9 , # [heuristic]
             'T_einstein': 764., # Fit to Roberts, 1981 (would be 516. from 0.8*Tdebye (645 K); see wiki)
             'n': sum(formula.values()),
             'molar_mass': formula_mass(formula)}
         Mineral.__init__(self)
 
-class Si_bcc_A2 (Mineral):
+class Si_hcp_A3 (Mineral):
+
     def __init__(self):
-        formula='Si1.0'
+        formula = 'Si'
         formula = dictionarize_formula(formula)
         self.params = {
-            'name': 'Si bcc A2',
+            'name': 'HCP Si',
             'formula': formula,
-            'equation_of_state': 'hp_tmt',
-            'H_0': 47000., # SGTE data
-            'S_0': 18.820 + 22.5, # Barin, SGTE data
-            'V_0': 9.1e-06 , # Hallstedt, 2007
-            'Cp': [22.826, 0.003856857, -353888.416, -0.0596068], # Barin
-            'a_0': 7.757256e-06 , # Fit to Roberts, 1981
-            'T_einstein': 764., # Fit to Roberts, 1981
-            'K_0': 50.e+9 , # ? Must destabilise BCC relative to HCP, FCC
-            'Kprime_0': 6.0 , # Similar to HCP, FCC
-            'Kdprime_0': -6.0/50.e+9 , # ?
+            'equation_of_state': 'slb3',
+            'F_0': 53280.,# - 7000., # make 7kJ/mol more stable to get closer to melting curve
+            'V_0': 8.61166e-6, # 8.658e-6,
+            'K_0': 100.e9,
+            'Kprime_0': 4.0,
+            'Debye_0': 600., # A4 is 645 K
+            'grueneisen_0': 1.0,
+            'q_0': 1.,
             'n': sum(formula.values()),
             'molar_mass': formula_mass(formula)}
         Mineral.__init__(self)
 
 class Si_fcc_A1 (Mineral):
+
     def __init__(self):
-        formula='Si1.0'
+        formula = 'Si'
         formula = dictionarize_formula(formula)
         self.params = {
-            'name': 'Si fcc A1',
+            'name': 'FCC Si',
             'formula': formula,
-            'equation_of_state': 'hp_tmt',
-            'H_0': 51000. , # SGTE data
-            'S_0': 18.820 + 21.8 , # Barin, SGTE data
-            'V_0': 9.2e-06 , # Hallstedt, 2007
-            'Cp': [22.826, 0.003856857, -353888.416, -0.0596068], # Barin
-            'a_0': 7.757256e-06 , # Fit to Roberts, 1981
-            'T_einstein': 764., # Fit to Roberts, 1981
-            'K_0': 40.15e9 , # 84 = Duclos et al
-            'Kprime_0': 6.1 , # 4.22 = Duclos et al
-            'Kdprime_0': -6.1/40.15e9 , # Duclos et al
+            'equation_of_state': 'slb3',
+            'F_0': 86540. - 1000., # make 1kJ/mol more stable to fit transition
+            'V_0': 7.665e-6,
+            'K_0': 159.e9,
+            'Kprime_0': 4.,
+            'Debye_0': 600., # A4 is 645 K
+            'grueneisen_0': 1.0,
+            'q_0': 1.,
             'n': sum(formula.values()),
             'molar_mass': formula_mass(formula)}
         Mineral.__init__(self)
 
-class Si_hcp_A3 (Mineral):
+class Si_liquid( Mineral ):
+    """
+    Liquid silicon using the Brosh-Calphad equation of state
+    """
     def __init__(self):
-        formula='Si1.0'
-        formula = dictionarize_formula(formula)
+        formula={'Si': 1.}
+        m = formula_mass(formula)
         self.params = {
-            'name': 'Si hcp A3',
+            'name': 'Si liquid (BroshEoS)',
             'formula': formula,
-            'equation_of_state': 'hp_tmt',
-            'H_0': 49200., # SGTE data
-            'S_0': 18.820 + 20.8, # Barin, SGTE data
-            'V_0': 8.8e-06 , # Hallstedt, 2007, smaller than fcc
-            'Cp': [22.826, 0.003856857, -353888.416, -0.0596068], # Barin
-            'a_0': 7.757256e-06 , # Fit to Roberts, 1981
-            'T_einstein': 764., # Fit to Roberts, 1981
-            'K_0': 57.44e9 , # 72 = Duclos et al
-            'Kprime_0': 5.87 , # Fit to Mujica et al. # 3.9 for Duclos et al
-            'Kdprime_0': -5.87/57.44e9 , # Duclos et al
+            'equation_of_state': 'brosh_calphad',
+            'molar_mass': m,
             'n': sum(formula.values()),
-            'molar_mass': formula_mass(formula)}
+            'gibbs_coefficients': [[12000., [42046., 107.4096, -22.826, 176944.208,
+                                             0., 0., 0., -1.92843e-3, 0., 0.,
+                                             0., -0.236272, 0.]]],
+            'V_0': 10.1e-06 , # 9.84e-6 gives a decent Fit to Watanabe et al. (2007) at 1 bar
+            'theta_0': 764./0.806, # Fit to Roberts, 1981 for A4
+            'K_0': 45.e9 , # 40.e9 is a decent fit to Watanabe et al. (2007) at 1 bar
+            'Kprime_0': 5.4 , # 5. is Anzellini for phase V
+            'grueneisen_0': 1.0, # 1. is a decent fit to Watanabe et al. (2007) at 1 bar
+            'delta': [2., 0.], # b5, b7
+            'b': [1., 1.] # b4, b6
+        }
         Mineral.__init__(self)
 
 
@@ -186,3 +189,89 @@ class half_FeSi_B20 (Mineral): # WARNING, no magnetic properties to avoid screwi
             'n': sum(formula.values()),
             'molar_mass': formula_mass(formula)}
         Mineral.__init__(self)
+
+"""
+class Si_bcc_A2 (Mineral):
+    def __init__(self):
+        formula='Si1.0'
+        formula = dictionarize_formula(formula)
+        self.params = {
+            'name': 'Si bcc A2',
+            'formula': formula,
+            'equation_of_state': 'hp_tmt',
+            'H_0': 47000., # Saunders et al. 1988
+            'S_0': 18.820 + 22.5, # Barin, Saunders et al. 1988 suggest dGrxn = 47000 - 22.5T
+            'V_0': 9.1e-06 , # Hallstedt, 2007
+            'Cp': [22.826, 0.003856857, -353888.416, -0.0596068], # Barin
+            'a_0': 7.757256e-06 , # Fit to Roberts, 1981 for A4
+            'T_einstein': 764., # Fit to Roberts, 1981 for A4
+            'K_0': 50.e+9 , # ? Must destabilise BCC relative to HCP, FCC
+            'Kprime_0': 6.0 , # Similar to HCP, FCC
+            'Kdprime_0': -6.0/50.e+9 , # ?
+            'n': sum(formula.values()),
+            'molar_mass': formula_mass(formula)}
+        Mineral.__init__(self)
+
+class Si_hcp_A3 (Mineral):
+    def __init__(self):
+        formula='Si1.0'
+        formula = dictionarize_formula(formula)
+        self.params = {
+            'name': 'Si hcp A3',
+            'formula': formula,
+            'equation_of_state': 'hp_tmt',
+            'H_0': 67331. -1847. -10000. - 0.*300., # Fit to Anzellini curves
+            'S_0': 18.820 + 20.8 - 0., # Barin, Saunders et al. 1988 suggest dGrxn = 49200 - 20.8T
+            'V_0': 8.51e-06 , # Refit from Anzellini (2019)
+            'Cp': [22.826, 0.003856857, -353888.416, -0.0596068], # Barin
+            'a_0': 15.e-06 , # 7.757256e-06 is Fit to Roberts, 1981 for A4
+            'T_einstein': 764., # Fit to Roberts, 1981 for A4
+            'K_0': 111.e9 , # Refit from Anzellini (2019)
+            'Kprime_0': 4. , # [fixed]
+            'Kdprime_0': -4./111.e9 , # [heuristic]
+            'n': sum(formula.values()),
+            'molar_mass': formula_mass(formula)}
+        Mineral.__init__(self)
+
+class Si_fcc_A1 (Mineral):
+    def __init__(self):
+        formula='Si1.0'
+        formula = dictionarize_formula(formula)
+        self.params = {
+            'name': 'Si fcc A1',
+            'formula': formula,
+            'equation_of_state': 'hp_tmt',
+            'H_0': 99850. -102., # Fit to Anzellini curves
+            'S_0': 18.820 + 21.8, # Barin, Saunders et al. 1988 suggest dGrxn = 51000 - 21.8T
+            'V_0': 7.6e-06 , # Refit to Anzellini, 2019 (Hallstedt, 2007 is 9.2!!)
+            'Cp': [22.826, 0.003856857, -353888.416, -0.0596068], # Barin
+            'a_0': 15.e-06 , # 7.757256e-06 Fit to Roberts, 1981 for A4
+            'T_einstein': 764., # Fit to Roberts, 1981 for A4
+            'K_0': 170.e9 , # Refit from Anzellini (2019)
+            'Kprime_0': 4.0 , # [fixed]
+            'Kdprime_0': -4.0/170.e9 , # [heuristic]
+            'n': sum(formula.values()),
+            'molar_mass': formula_mass(formula)}
+        Mineral.__init__(self)
+
+class Si_liquid (Mineral):
+    def __init__(self):
+        formula='Si1.0'
+        formula = dictionarize_formula(formula)
+        self.params = {
+            'name': 'Si liquid',
+            'formula': formula,
+            'equation_of_state': 'hp_tmt',
+            'H_0': 50208. , # SGTE data
+            'S_0': 18.820 + 29.797, # Barin, Saunders et al. 1988 suggest dGrxn = 50208 - 29.762T
+            'V_0': 10.07e-06 , # Fit to Watanabe et al. (2007); 9.154e-06 is Anzellini for phase V
+            'Cp': [22.826, 0.003856857, -353888.416, -0.0596068], # Barin for A4, assume the same (in Barin, is constant 27.196, but this is probably not that accurate). Agrees with Kobatake et al. (2008): 30+/-5 J mol−1K−1 from 1750–2050K.
+            'a_0': 29.e-06 , # Fit to Watanabe et al. (2007)
+            'T_einstein': 764., # Fit to Roberts, 1981 for A4
+            'K_0': 60.e9 , # 99.e9 is Anzellini for phase V
+            'Kprime_0': 6. , # 5. is Anzellini for phase V
+            'Kdprime_0': -6./60.e9 , # [heuristic]
+            'n': sum(formula.values()),
+            'molar_mass': formula_mass(formula)}
+        Mineral.__init__(self)
+"""
