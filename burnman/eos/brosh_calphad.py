@@ -59,7 +59,7 @@ class BroshCalphad(eos.EquationOfState):
         dP = 1000.
         dV = (self.volume(pressure + dP/2., temperature, params) -
               self.volume(pressure - dP/2., temperature, params))
-        return 1./volume*dP/dV
+        return -volume*dP/dV
 
     def adiabatic_bulk_modulus(self, pressure, temperature, volume, params):
         """
