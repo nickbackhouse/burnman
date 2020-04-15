@@ -35,19 +35,56 @@ dataset = {'endmembers': endmembers,
            'assemblages': experimental_assemblages}
 
 
-# Here are lists of the parameters we're trying to fit
-endmember_args = [] # nothing here yet ['wus', 'H_0', wus.params['H_0'], 1.e3]
+"""
+BEGIN USER INPUTS
+
+Here are lists of the parameters we're trying to fit
+
+- endmember_args should be a list of lists with the format
+[<endmember name in dictionary>, <parameter name to change>, <starting value>, <normalization: expected size of change>]
+For example, changing the standard Helmholtz free energy of fcc_silicon would look like this:
+['fcc_silicon', 'F_0', endmembers['fcc_silicon'].params['F_0'], 1.e3]
+"""
+
+endmember_args = [] # nothing here yet
+
+"""
+- solution_args is similar, but for solution phases.
+[<solution name in dictionary>, <excess property to change (E, S or V)>, <endmember a #>, <endmember b # - endmember a # -1>, <starting value>, <normalization: expected size of change>]
+For example, changing the interaction energy (E) in the binary HCP phase would look like this:
+['hcp_fe_si', 'E', 0, 0, solutions['hcp_fe_si'].energy_interaction[0][0], 1.e3]
+"""
+
 solution_args = [['hcp_fe_si', 'E', 0, 0,
                   solutions['hcp_fe_si'].energy_interaction[0][0], 1.e3]]
 
-# Here are lists of Gaussian priors for the parameters we're trying to fit
+"""
+Here are lists of Gaussian priors for the parameters we're trying to fit
+Leave them empty if you don't have any strong constraints on the parameter values
+"""
+
 endmember_priors = [] # nothing here right now
 solution_priors = [] # nothing here right now
 
-# Here are lists of experiment uncertainties for when
-# there are multiple sample chambers per experiment
+"""
+Here are lists of experiment uncertainties for when
+there are multiple sample chambers per experiment.
+Leave them empty if you don't have any multichamber experiments.
+"""
+
 experiment_uncertainties = [] # nothing here right now
 
+
+"""
+Finally, you can declare a function allowing you to
+impose special constraints on the dataset.
+"""
+def special_constraints(dataset, storage):
+    pass # nothing here right now
+
+"""
+END USER INPUTS
+"""
 
 # Create storage object of all the priors and uncertainties
 storage = Storage({'endmember_args': endmember_args,
@@ -62,9 +99,6 @@ labels.extend(['{0}_{1}[{2},{3}]'.format(a[0], a[1], a[2], a[3])
                for a in solution_args])
 labels.extend(['{0}_{1}'.format(a[0], a[1]) for a in experiment_uncertainties])
 
-
-def special_constraints(dataset, storage):
-    pass # nothing here right now
 
 """
 Run the minimization
