@@ -110,9 +110,14 @@ if run_inversion:
                    method='BFGS') # , options={'eps': 1.e-02}))
 
     if not sol.success:
-        print('UNFORTUNATELY, THE INVERSION FAILED.')
-        print('This could be because you have bad data or unconstrained parameters.')
-        print(sol)
+        if sol.status == 2:
+            print('THE INVERSION MAY HAVE BEEN SUCCESSFUL, BUT THERE WAS A PRECISION LOSS WARNING')
+            print('This could be because you have a lot of data which is not constraining any parameters.')
+            print(sol)
+        else:
+            print('UNFORTUNATELY, THE INVERSION FAILED.')
+            print('This could be because you have bad data, a lot of data which is not constraining any parameters, or you have parameters not constrained by the data.')
+            print(sol)
     else:
         print('INVERSION SUCCESSFUL!')
         print('Final misfit: {0}'.format(sol.fun))
