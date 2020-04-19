@@ -137,6 +137,7 @@ def minimize_func(params, dataset, storage, special_constraint_function, verbose
     set_params(params, dataset, storage,
                special_constraint_function=special_constraint_function)
 
+    data_good = True
     chisqr = []
     # Run through all assemblages for affinity misfit
     # This is what takes most of the time
@@ -176,9 +177,14 @@ def minimize_func(params, dataset, storage, special_constraint_function, verbose
 
         # Calculate the misfit and store it
         assemblage.chisqr = assemblage_affinity_misfit(assemblage)
-        # print('assemblage chisqr', assemblage.experiment_id,
-        # [phase.name for phase in assemblage.phases], assemblage.chisqr)
+        if np.isnan(assemblage.chisqr):
+            data_good = False
+            print('bad data in expt {0}, chisqr could not be calculated'.format(assemblage.experiment_id))
+            print('contains phases: {0}'.format([phase.name for phase in assemblage.phases]))
         chisqr.append(assemblage.chisqr)
+
+    if not data_good:
+        raise Exception('You must fix the bad data (see above) before inverting.')
 
     # Endmember priors
     for p in storage['endmember_priors']:

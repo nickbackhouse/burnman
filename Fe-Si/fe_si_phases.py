@@ -19,7 +19,8 @@ endmembers = {'bcc_iron': minerals.SE_2015.bcc_iron(), # iron polymorphs
               'fcc_silicon': minerals.Fe_Si.Si_fcc_A1(),
               'hcp_silicon': minerals.Fe_Si.Si_hcp_A3(),
               'liq_silicon': minerals.Fe_Si.Si_liquid(),
-              'B2_FeSi': minerals.Fe_Si.FeSi_B2()}
+              'B2_FeSi': minerals.Fe_Si.FeSi_B2(),
+              'B20_FeSi': minerals.Fe_Si.FeSi_B20()}
 
 
 solutions = {'B2_fe_si': burnman.SolidSolution(name = 'B2-ordered bcc Fe-Si',
