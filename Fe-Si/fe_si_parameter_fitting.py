@@ -42,7 +42,7 @@ Here are lists of the parameters we're trying to fit
 
 - endmember_args should be a list of lists with the format
 [<endmember name in dictionary>, <parameter name to change>, <starting value>, <normalization: expected size of change>]
-For example, changing the standard Helmholtz free energy of fcc_silicon would look like this:
+For example, adding the standard Helmholtz free energy of fcc_silicon as a parameter would look like this:
 ['fcc_silicon', 'F_0', endmembers['fcc_silicon'].params['F_0'], 1.e3]
 """
 
@@ -51,12 +51,12 @@ endmember_args = [] # nothing here yet
 """
 - solution_args is similar, but for solution phases.
 [<solution name in dictionary>, <excess property to change (E, S or V)>, <endmember a #>, <endmember b # - endmember a # -1>, <starting value>, <normalization: expected size of change>]
-For example, changing the interaction energy (E) in the binary HCP phase would look like this:
+For example, adding the interaction energy (E) in the binary HCP phase as a parameter would look like this:
 ['hcp_fe_si', 'E', 0, 0, solutions['hcp_fe_si'].energy_interaction[0][0], 1.e3]
 """
 
-solution_args = [['hcp_fe_si', 'E', 0, 0,
-                  solutions['hcp_fe_si'].energy_interaction[0][0], 1.e3]]
+solution_args = [['fcc_fe_si', 'E', 0, 0,
+                  solutions['fcc_fe_si'].energy_interaction[0][0], 1.e3]]
 
 """
 Here are lists of Gaussian priors for the parameters we're trying to fit
@@ -108,7 +108,14 @@ if run_inversion:
     sol = minimize(minimize_func, get_params(storage),
                    args=(dataset, storage, special_constraints, verbose),
                    method='BFGS') # , options={'eps': 1.e-02}))
-    print('Finished inversion. It is *{0}* that this was successful'.format(sol.success))
+
+    if not sol.success:
+        print('UNFORTUNATELY, THE INVERSION FAILED.')
+        print('This could be because you have bad data or unconstrained parameters.')
+        print(sol)
+    else:
+        print('INVERSION SUCCESSFUL!')
+        print('Final misfit: {0}'.format(sol.fun))
 
 # Print the current parameters
 prms = get_params(storage)
