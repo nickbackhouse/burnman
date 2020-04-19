@@ -188,10 +188,6 @@ experiments = [{'id': 'ozawa_3', 'P': 47.e9, 'T': 3160, 'P_unc': 4e9, 'T_unc': 1
                 'phases': ['B2_fe_si','liq_fe_si'],
                 'Si_mol_percents': [33, 22.9],
                 'Si_mol_percents_unc': [8.3, 5.2]},
-                {'id': 'K&H2004', 'P': 21e9, 'T': 2093, 'P_unc': 1e9, 'T_unc': 50,
-                'phases': ['B2_fe_si','fcc_fe_si','liq_fe_si'],
-                'Si_mol_percents': [50, 10, 41.1],
-                'Si_mol_percents_unc': [10, 10, 2]},
                 {'id': 'Lac&sund', 'P': 0e9, 'T': 1500, 'P_unc': 0e9, 'T_unc': 50,
                 'phases': ['B2_fe_si','fcc_fe_si','liq_fe_si'],
                 'Si_mol_percents': [50, 10, 35.3],
@@ -237,7 +233,7 @@ experiments = [{'id': 'ozawa_3', 'P': 47.e9, 'T': 3160, 'P_unc': 4e9, 'T_unc': 1
                 'Si_mol_percents': [30.39, 11.26],
                 'Si_mol_percents_unc': [1,5]},
                 {'id': 'fischer2013_59', 'P': 80.3e9, 'T': 3615, 'P_unc': 1.6e9, 'T_unc': 121,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi23A', 'P': 2e9, 'T': 1999, 'P_unc': 0.5e9, 'T_unc': 69,
@@ -326,8 +322,12 @@ experiments = [{'id': 'ozawa_3', 'P': 47.e9, 'T': 3160, 'P_unc': 4e9, 'T_unc': 1
                 'Si_mol_percents_unc': [0.1,0.1]}]
 
 
-
-#this is all the data I have, lots of the compositions are estimated from Fischer, but where I've had to estimate I've used large errors. The only data not here is some of the FIscher data, three of the pieces of melting data have three coextisting solid phases, and im not sure how to estimate their compositions.
+#this is all the data I have,
+#lots of the compositions are estimated from Fischer,
+#but where I've had to estimate I've used large errors.
+#The only data not here is some of the FIscher data,
+#three of the pieces of melting data have three coextisting solid phases,
+#and im not sure how to estimate their compositions.
 
 
 """
