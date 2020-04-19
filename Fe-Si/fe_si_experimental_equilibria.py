@@ -189,51 +189,51 @@ experiments = [{'id': 'ozawa_3', 'P': 47.e9, 'T': 3160, 'P_unc': 4e9, 'T_unc': 1
                 'Si_mol_percents': [33, 22.9],
                 'Si_mol_percents_unc': [8.3, 5.2]},
                 {'id': 'K&H2004', 'P': 21e9, 'T': 2093, 'P_unc': 1e9, 'T_unc': 50,
-                'phases': ['bcc_fe_si','fcc_fe_si','liq_fe_si'],
+                'phases': ['B2_fe_si','fcc_fe_si','liq_fe_si'],
                 'Si_mol_percents': [50, 10, 41.1],
                 'Si_mol_percents_unc': [10, 10, 2]},
                 {'id': 'Lac&sund', 'P': 0e9, 'T': 1500, 'P_unc': 0e9, 'T_unc': 50,
-                'phases': ['bcc_fe_si','fcc_fe_si','liq_fe_si'],
+                'phases': ['B2_fe_si','fcc_fe_si','liq_fe_si'],
                 'Si_mol_percents': [50, 10, 35.3],
                 'Si_mol_percents_unc': [10, 10, 2]},
                 {'id': 'K&H2004', 'P': 21e9, 'T': 2093, 'P_unc': 1e9, 'T_unc': 50,
-                'phases': ['bcc_fe_si','fcc_fe_si','liq_fe_si'],
+                'phases': ['B2_fe_si','fcc_fe_si','liq_fe_si'],
                 'Si_mol_percents': [50, 10, 41.1],
                 'Si_mol_percents_unc': [10, 10, 2]},
                 {'id': 'asanuma2010_FESI16', 'P': 22e9, 'T': 2210, 'P_unc': 1e9, 'T_unc': 50,
-                'phases': ['bcc_fe_si','liq_fe_si'],
+                'phases': ['B2_fe_si','liq_fe_si'],
                 'Si_mol_percents': [30.39, 25.97],
                 'Si_mol_percents_unc': [1,5]},
                 {'id': 'asanuma2010_FESI04', 'P': 28e9, 'T': 2290, 'P_unc': 1e9, 'T_unc': 50,
-                'phases': ['bcc_fe_si','liq_fe_si'],
+                'phases': ['B2_fe_si','liq_fe_si'],
                 'Si_mol_percents': [30.39, 25.97],
                 'Si_mol_percents_unc': [1,5]},
                 {'id': 'asanuma2010_FESI05', 'P': 34e9, 'T': 2610, 'P_unc': 6e9, 'T_unc': 50,
-                'phases': ['bcc_fe_si','liq_fe_si'],
+                'phases': ['B2_fe_si','liq_fe_si'],
                 'Si_mol_percents': [30.39, 25.97],
                 'Si_mol_percents_unc': [1,5]},
                 {'id': 'asanuma2010_FESI06', 'P': 49e9, 'T': 2730, 'P_unc': 1e9, 'T_unc': 100,
-                'phases': ['bcc_fe_si','liq_fe_si'],
+                'phases': ['B2_fe_si','liq_fe_si'],
                 'Si_mol_percents': [30.39, 25.97],
                 'Si_mol_percents_unc': [1,5]},
                 {'id': 'asanuma2010_FESI12', 'P': 58e9, 'T': 2800, 'P_unc': 1e9, 'T_unc': 100,
-                'phases': ['bcc_fe_si','liq_fe_si'],
+                'phases': ['B2_fe_si','liq_fe_si'],
                 'Si_mol_percents': [30.39, 25.97],
                 'Si_mol_percents_unc': [1,5]},
                 {'id': 'asanuma2010_FESI09', 'P': 68e9, 'T': 2880, 'P_unc': 2e9, 'T_unc': 50,
-                'phases': ['bcc_fe_si','liq_fe_si'],
+                'phases': ['B2_fe_si','liq_fe_si'],
                 'Si_mol_percents': [30.39, 25.97],
                 'Si_mol_percents_unc': [1,5]},
                 {'id': 'asanuma2010_FESI14', 'P': 104e9, 'T': 3060, 'P_unc': 1e9, 'T_unc': 100,
-                'phases': ['bcc_fe_si','liq_fe_si'],
+                'phases': ['B2_fe_si','liq_fe_si'],
                 'Si_mol_percents': [30.39, 21.33],
                 'Si_mol_percents_unc': [1,5]},
                 {'id': 'asanuma2010_FESI15', 'P': 119e9, 'T': 3240, 'P_unc': 1e9, 'T_unc': 100,
-                'phases': ['bcc_fe_si','liq_fe_si'],
+                'phases': ['B2_fe_si','liq_fe_si'],
                 'Si_mol_percents': [30.39, 11.26],
                 'Si_mol_percents_unc': [1,5]},
                 {'id': 'asanuma2010_FESI15', 'P': 119e9, 'T': 3240, 'P_unc': 1e9, 'T_unc': 100,
-                'phases': ['bcc_fe_si','liq_fe_si'],
+                'phases': ['B2_fe_si','liq_fe_si'],
                 'Si_mol_percents': [30.39, 11.26],
                 'Si_mol_percents_unc': [1,5]},
                 {'id': 'fischer2013_59', 'P': 80.3e9, 'T': 3615, 'P_unc': 1.6e9, 'T_unc': 121,
@@ -241,95 +241,95 @@ experiments = [{'id': 'ozawa_3', 'P': 47.e9, 'T': 3160, 'P_unc': 4e9, 'T_unc': 1
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi23A', 'P': 2e9, 'T': 1999, 'P_unc': 0.5e9, 'T_unc': 69,
-                'phases': ['B20_fe_si','liq_fe_si'],
+                'phases': ['B20_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi23A', 'P': 2e9, 'T': 1999, 'P_unc': 0.5e9, 'T_unc': 69,
-                'phases': ['B20_fe_si','liq_fe_si'],
+                'phases': ['B20_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi21A', 'P': 5e9, 'T': 2121, 'P_unc': 1e9, 'T_unc': 82,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi21B', 'P': 7e9, 'T': 2235, 'P_unc': 1e9, 'T_unc': 103,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi02C', 'P': 10e9, 'T': 2322, 'P_unc': 1e9, 'T_unc': 58,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi19B', 'P': 14e9, 'T': 2474, 'P_unc': 1e9, 'T_unc': 62,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi19A', 'P': 15e9, 'T': 2415, 'P_unc': 1e9, 'T_unc': 68,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi03A', 'P': 20e9, 'T': 2628, 'P_unc': 2e9, 'T_unc': 81,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi20A', 'P': 22e9, 'T': 2697, 'P_unc': 1e9, 'T_unc': 50,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi19C', 'P': 26e9, 'T': 2788, 'P_unc': 1e9, 'T_unc': 71,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi20B', 'P': 35e9, 'T': 2966, 'P_unc': 4e9, 'T_unc': 74,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi19E', 'P': 44e9, 'T': 3033, 'P_unc': 3.8e9, 'T_unc': 96,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi19E', 'P': 52e9, 'T': 3204, 'P_unc': 3e9, 'T_unc': 77,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi22A', 'P': 52e9, 'T': 3204, 'P_unc': 3e9, 'T_unc': 77,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi22B', 'P': 55e9, 'T': 3175, 'P_unc': 2e9, 'T_unc': 72,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi20C', 'P': 59e9, 'T': 3356, 'P_unc': 2e9, 'T_unc': 86,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi19F', 'P': 68e9, 'T': 3461, 'P_unc': 1.4e9, 'T_unc': 180,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi27A', 'P': 99e9, 'T': 3860, 'P_unc': 4e9, 'T_unc': 138,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi26B', 'P': 105e9, 'T': 3859, 'P_unc': 4e9, 'T_unc': 139,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi25C', 'P': 139e9, 'T': 3951, 'P_unc': 4e9, 'T_unc': 123,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
                 'Si_mol_percents_unc': [0.1,0.1]},
                 {'id': 'lord2010_FeSi25C', 'P': 152e9, 'T': 4069, 'P_unc': 4e9, 'T_unc': 98,
-                'phases': ['B2_fe_si','liq_fe_si'],
+                'phases': ['B2_FeSi','liq_fe_si'],
                 'Si_mol_percents': [50, 50],
-                'Si_mol_percents_unc': [0.1,0.1]},
-                
-                
-                
+                'Si_mol_percents_unc': [0.1,0.1]}]
+
+
+
 #this is all the data I have, lots of the compositions are estimated from Fischer, but where I've had to estimate I've used large errors. The only data not here is some of the FIscher data, three of the pieces of melting data have three coextisting solid phases, and im not sure how to estimate their compositions.
-                
-                
+
+
 """
 This is where we load the state and compositional information into assemblages.
 Unless you want to add new phases, you shouldn't need to do anything here.
@@ -345,8 +345,10 @@ for i, expt in enumerate(experiments):
         try:
             phases.append(solutions[phase_name])
         except KeyError:
-            raise Exception('This file is not set up to handle endmember reactions yet')
-            #phases.append(endmembers[phase_name])
+            try:
+                phases.append(endmembers[phase_name])
+            except KeyError:
+                raise Exception('Phase not recognised')
 
     assemblage = burnman.Composite(phases)
 
@@ -359,24 +361,31 @@ for i, expt in enumerate(experiments):
 
     # Assign *elemental* compositions and compositional uncertainties to the phases
     for k, phase in enumerate(expt['phases']):
-        assemblage.phases[k].fitted_elements = ['Fe', 'Si']
 
-        x_Si = expt['Si_mol_percents'][k]/100.
-        x_Fe = 1. - x_Si
-        x_Si_unc = max(expt['Si_mol_percents_unc'][k]/100., 0.001)/np.sqrt((1. - 2.*x_Fe*(1. - x_Fe)))
-        x_Fe_unc = x_Si_unc
+        # We only need to do this for solution phases
+        if assemblage.phases[k] in solutions.values():
+            assemblage.phases[k].fitted_elements = ['Fe', 'Si']
 
-        assemblage.phases[k].composition = np.array([x_Fe, x_Si])
-        assemblage.phases[k].compositional_uncertainties = np.array([x_Fe_unc, x_Si_unc])
+            x_Si = expt['Si_mol_percents'][k]/100.
+            x_Fe = 1. - x_Si
+            x_Si_unc = max(expt['Si_mol_percents_unc'][k]/100., 0.001)/np.sqrt((1. - 2.*x_Fe*(1. - x_Fe)))
+            x_Fe_unc = x_Si_unc
+
+            assemblage.phases[k].composition = np.array([x_Fe, x_Si])
+            assemblage.phases[k].compositional_uncertainties = np.array([x_Fe_unc, x_Si_unc])
 
     # Compute the *phase proportions* and associated uncertainties
     burnman.processanalyses.compute_and_set_phase_compositions(assemblage)
 
     # Store the compositions as attributes of the *assemblage*
     # rather than attributes of each phase so that they don't get overwritten
-    assemblage.stored_compositions = [(assemblage.phases[k].molar_fractions,
-                                       assemblage.phases[k].molar_fraction_covariances)
-                                      for k in range(n_phases)]
+    assemblage.stored_compositions = ['composition not assigned']*len(assemblage.phases)
+    for k in range(len(phases)):
+        try:
+            assemblage.stored_compositions[k] = (assemblage.phases[k].molar_fractions,
+                                                 assemblage.phases[k].molar_fraction_covariances)
+        except AttributeError:
+            pass
 
     # Append the assemblage to the list of experimental assemblages
     experimental_assemblages.append(assemblage)
