@@ -55,12 +55,12 @@ For example, adding the interaction energy (E) in the binary HCP phase as a para
 ['hcp_fe_si', 'E', 0, 0, solutions['hcp_fe_si'].energy_interaction[0][0], 1.e3]
 """
 
-solution_args = [['B2_fe_si', 'E', 0, 0,solutions['B2_fe_si'].energy_interaction[0][0], 1.e3],
-                 ['B2_fe_si', 'V', 0, 0,solutions['B2_fe_si'].volume_interaction[0][0], 1.e-8],
-                 ['fcc_fe_si', 'E', 0, 0,solutions['hcp_fe_si'].energy_interaction[0][0], 1.e3],
-                 ['fcc_fe_si', 'V', 0, 0,solutions['hcp_fe_si'].volume_interaction[0][0], 1.e-8],
-                 ['hcp_fe_si', 'E', 0, 0,solutions['hcp_fe_si'].energy_interaction[0][0], 1.e3],
-                 ['hcp_fe_si', 'V', 0, 0,solutions['hcp_fe_si'].volume_interaction[0][0], 1.e-8]]
+solution_args = [['B2_fe_si', 'E', 0, 0, solutions['B2_fe_si'].energy_interaction[0][0], 1.e3],
+                 ['B2_fe_si', 'V', 0, 0, solutions['B2_fe_si'].volume_interaction[0][0], 1.e-8],
+                 ['fcc_fe_si', 'E', 0, 0, solutions['fcc_fe_si'].energy_interaction[0][0], 1.e3],
+                 ['fcc_fe_si', 'V', 0, 0, solutions['fcc_fe_si'].volume_interaction[0][0], 1.e-8],
+                 ['hcp_fe_si', 'E', 0, 0, solutions['hcp_fe_si'].energy_interaction[0][0], 1.e3],
+                 ['hcp_fe_si', 'V', 0, 0, solutions['hcp_fe_si'].volume_interaction[0][0], 1.e-8]]
 
 """
 Here are lists of Gaussian priors for the parameters we're trying to fit
@@ -103,6 +103,9 @@ labels.extend(['{0}_{1}[{2},{3}]'.format(a[0], a[1], a[2], a[3])
                for a in solution_args])
 labels.extend(['{0}_{1}'.format(a[0], a[1]) for a in experiment_uncertainties])
 
+normalizations = [a[-1] for a in endmember_args]
+normalizations.extend([a[-1] for a in solution_args])
+normalizations.extend([1. for a in experiment_uncertainties])
 
 """
 Run the minimization
@@ -128,8 +131,9 @@ if run_inversion:
 
 # Print the current parameters
 prms = get_params(storage)
-print('\nNormalised parameters:')
+print('\nOptimised parameters:')
 for i in range(len(labels)):
-    print('{0}: {1}'.format(labels[i], prms[i]))
-print('\nTo get to the real parameters, you must multiply by the user-defined constants.')
-print('You can also interrogate the dataset itself, whose properties are now updated.')
+    print('{0}: {1}'.format(labels[i], prms[i]*normalizations[i]))
+
+print('\nIf the dataset is used later in this file, these parameter values will be used automatically.')
+print('For example, the FCC energy interaction parameter is now {0} J/mol'.format(solutions['fcc_fe_si'].energy_interaction[0][0]))
