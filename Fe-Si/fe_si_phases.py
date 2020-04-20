@@ -48,7 +48,7 @@ solutions = {'B2_fe_si': burnman.SolidSolution(name = 'B2-ordered bcc Fe-Si',
                                                 solution_type = 'symmetric',
                                                 endmembers = [[endmembers['liq_iron'],    '[Fe]'],
                                                               [endmembers['liq_silicon'], '[Si]']],
-                                                energy_interaction = [[10.0e3]],
+                                                energy_interaction = [[-100.0e3]],
                                                 entropy_interaction = [[0.0e3]],
                                                 volume_interaction = [[0.0e3]])}
 

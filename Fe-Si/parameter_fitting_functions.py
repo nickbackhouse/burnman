@@ -219,6 +219,7 @@ def minimize_func(params, dataset, storage, special_constraint_function, verbose
         print(param_list_to_string(params))
 
     if verbose:
+        print(param_list_to_string(params))
         print('RMS misfit: {0}'.format(np.sqrt(half_sqr_misfit)))
 
     if np.isnan(half_sqr_misfit) or not np.isfinite(half_sqr_misfit):
