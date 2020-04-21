@@ -1,4 +1,4 @@
-#my attempts this morning, both times I haven't got past calculating the invariant point
+
 
 
 from __future__ import absolute_import
@@ -23,37 +23,12 @@ hcp = solutions['hcp_fe_si']
 B2 = solutions['B2_fe_si']
 
 from endmember_and_binary_equilibrium_functions import *
+from fe_si_experimental_equilibria import *
 
 
-def binary_equilibrium(P, T, phase_A, phase_B, guess):
+def invariant_point(P, phase_A, phase_B, phase_C, guess):
     """
-    For binary equilibria at fixed P and T, we have two unknowns
-    (composition of A, composition of B) and two equations
-    (the chemical potentials of Fe and Si must be the same in both phases)
-    """
-    def affinities(args):
-        x_A, x_B = args
-        for phase in [phase_A, phase_B]:
-            phase.set_state(P, T)
-
-        phase_A.set_composition([x_A, 1.-x_A])
-        phase_B.set_composition([x_B, 1.-x_B])
-
-        mu_A = phase_A.partial_gibbs
-        mu_B = phase_B.partial_gibbs
-
-        return np.array([mu_A[0] - mu_B[0],
-                         mu_A[1] - mu_B[1]])
-
-    sol = root(affinities, guess)
-    return sol.x, sol.success
-
-def ternary_equilibrium_constant_P(P, phase_A, phase_B, phase_C, guess):
-    """
-    For equilibria between three binary phases at fixed P or T,
-    we have four unknowns (T or P, and the compositions of the three phases)
-    and four corresponding equations
-    (the chemical potentials of Fe and Si must be the same in all three phases).
+    for the invariant point in a binary system we have to output three compositions and the temperature
     """
     def affinities(args):
         T, x_A, x_B, x_C = args
@@ -62,7 +37,7 @@ def ternary_equilibrium_constant_P(P, phase_A, phase_B, phase_C, guess):
 
         phase_A.set_composition([x_A, 1.-x_A])
         phase_B.set_composition([x_B, 1.-x_B])
-        phase_B.set_composition([x_C, 1.-x_C])
+        phase_C.set_composition([x_C, 1.-x_C])
 
         mu_A = phase_A.partial_gibbs
         mu_B = phase_B.partial_gibbs
@@ -73,67 +48,54 @@ def ternary_equilibrium_constant_P(P, phase_A, phase_B, phase_C, guess):
                          mu_A[0] - mu_C[0],
                          mu_A[1] - mu_C[1]])
 
+
     sol = root(affinities, guess)
     return sol.x, sol.success
 
 
-def invariant_point(phase_A, phase_B, phase_C, P_guess, T_guess):
-    def affinity(args):
-        P, T = args
-        for phase in [phase_A, phase_B, phase_C]:
-            phase.set_state(P, T)
-        return [phase_A.gibbs - phase_B.gibbs,
-                phase_A.gibbs - phase_C.gibbs]
-
-    sol = root(affinity, [P_guess, T_guess])
-    return sol.x, sol.success
 
 
-#attempt 1
+#I've managed to make it output three compositions and a temperature (the function I now realise is exactly the same as the ternary_equilibrium function but nevermind!) but I dont believe the temperature its outputting (590K)
 
-#find the invariant point
+guess1 = [3000,0.25,0.25,0.5]
+TX_inv, success = invariant_point(P=50.e9, phase_A=fcc, phase_B=hcp, phase_C=liq, guess=guess1)
 
-P_inv, T_inv = ternary_equilibrium_constant_P(100.e9, fcc, hcp, liq, 3000.)[0]
-
-# Create pressure arrays above and below the invariant point
-low_ps = np.linspace(0, P_inv, 101)
-high_ps = np.linspace(P_inv, 330.e9, 101)
-
-# Find the transition temperatures for each transition
-fcc_liq_temperatures = [binary_equilibrium(p, fcc, liq, T_guess=2000.)[0] for p in low_ps]
-fcc_hcp_temperatures = [binary_equilibrium(p, fcc, hcp, T_guess=2000.)[0] for p in low_ps]
-hcp_liq_temperatures = [binary_equilibrium(p, hcp, liq, T_guess=2000.)[0] for p in high_ps]
-
-# Plot the transition pressures
-plt.plot(low_ps/1.e9, fcc_liq_temperatures, color='blue', label='FCC-liq')
-plt.plot(low_ps/1.e9, fcc_hcp_temperatures, color='blue',linestyle='dotted', label='FCC-HCP')
-plt.plot(high_ps/1.e9, hcp_liq_temperatures, color='blue',linestyle='dashed', label='HCP-liq')
+T_inv = TX_inv[0]
+XA_inv = TX_inv[1]
+XB_inv = TX_inv[2]
+XC_inv = TX_inv[3]
 
 
-#I've updated the parameters based on an inversion, but when I try and plot them the ternary equilibrium function
-#throws up ValueError: not enough values to unpack (expected 4, got 1). Ternary equilibrium constant is the wrong 
-#function as this is a binary system
+temperatures = np.linspace(1000, 5000., 101)
+temperatures1 = np.linspace(1000., 5000., 101)
+P = 50.e9
+Ts = []
+T1s = []
+x_As = []
+x_Bs = []
+x_Cs = []
+x_Ds = []
 
+for T in temperatures:
+    guess = [0.5, 0.5]
+    sol, success = binary_equilibrium(P=P, T=T, phase_A=liq, phase_B=hcp, guess=guess)
+    if success:
+        Ts.append(T)
+        x_As.append(sol[0])
+        x_Bs.append(sol[1])
+        
+       
+        
+for T1 in temperatures1:
+    guess = [0.5, 0.5]
+    sol1, success = binary_equilibrium(P=P, T=T1, phase_A=fcc, phase_B=liq, guess=guess)
+    if success:
+        T1s.append(T1)
+        x_Cs.append(sol1[0])
+        x_Ds.append(sol1[1])        
 
-
-#attempt 2: added the invariant_point funtion
-
-#find the invariant point
-
-P_inv, T_inv = invariant_point(fcc, hcp, liq, 100.e9, 3000.)[0]
-
-# Create pressure arrays above and below the invariant point
-low_ps = np.linspace(0, P_inv, 101)
-high_ps = np.linspace(P_inv, 330.e9, 101)
-
-# Find the transition temperatures for each transition
-fcc_liq_temperatures = [binary_equilibrium(p, fcc, liq, T_guess=2000.)[0] for p in low_ps]
-fcc_hcp_temperatures = [binary_equilibrium(p, fcc, hcp, T_guess=2000.)[0] for p in low_ps]
-hcp_liq_temperatures = [binary_equilibrium(p, hcp, liq, T_guess=2000.)[0] for p in high_ps]
-
-# Plot the transition pressures
-plt.plot(low_ps/1.e9, fcc_liq_temperatures, color='blue', label='FCC-liq')
-plt.plot(low_ps/1.e9, fcc_hcp_temperatures, color='blue',linestyle='dotted', label='FCC-HCP')
-plt.plot(high_ps/1.e9, hcp_liq_temperatures, color='blue',linestyle='dashed', label='HCP-liq')
-
-#AttributeError: 'SolidSolution' object has no attribute 'molar_fractions'. I assume I've misubderstood how to calculate the invariant point
+plt.plot(x_As, Ts)
+plt.plot(x_Bs, Ts)
+plt.plot(x_Cs, T1s)
+plt.plot(x_Ds, T1s)
+plt.show()
