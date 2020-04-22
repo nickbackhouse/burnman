@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
 
 from __future__ import absolute_import
 from __future__ import print_function
@@ -24,84 +29,68 @@ from endmember_and_binary_equilibrium_functions import *
 from fe_si_experimental_equilibria import *
 
 
-#
-
-def binary_equilibrium_B2(P, T, phase_A, phase_B, guess):
-    """
-    binary equilibrium for B2 phase boundaries
-    """
-    def affinities(args):
-        x_A, x_B = args
-        for phase in [phase_A, phase_B]:
-            phase.set_state(P, T)
-
-        phase_A.set_composition([x_A, 1-x_A])
-        phase_B.set_composition([(x_B-0.5)/0.5, -(-x_B+0.5)/0.5]) #I get assertion errors from this line
-
-        mu_A = phase_A.partial_gibbs
-        mu_B = phase_B.partial_gibbs
-
-        return np.array([mu_A[0] - mu_B[0],
-                         mu_A[1] - mu_B[1]])
-
-    sol = root(affinities, guess)
-    return sol.x, sol.success
+# In[48]:
 
 
-# In[247]:
+P = 80.e9
+guess1 = [3000,0.2,0.2,0.8]
+TX_inv, success = ternary_equilibrium_constant_P(P=P, phase_A=fcc, phase_B=liq, phase_C=B2, guess=guess1)
+
+T_inv = TX_inv[0]
+XA_inv = TX_inv[1]
+XB_inv = TX_inv[2]
+XC_inv = TX_inv[3]
 
 
-P = 50.e9
-#guess1 = [3000,0.25,0.25,0.5]
-#TX_inv, success = ternary_equilibrium_constant_P(P=P, phase_A=fcc, phase_B=B2, phase_C=liq, guess=guess1)
-
-#T_inv = TX_inv[0]
-#XA_inv = TX_inv[1]
-#XB_inv = TX_inv[2]
-#XC_inv = TX_inv[3]
-
-
-temperatures = np.linspace(1, 5000., 101)
-temperatures1 = np.linspace(1, 5000., 101)
+temperatures = np.linspace(T_inv, 5000, 101)
+temperatures1 = np.linspace(T_inv, 5000, 101)
 Ts = []
 T1s = []
 x_As = []
 x_Bs = []
 x_Cs = []
 x_Ds = []
+x_B2 = []
 
 for T in temperatures:
-    guess = [0.5, 0.5]
-    sol, success = binary_equilibrium_B2(P=P, T=T, phase_A=liq, phase_B=B2, guess=guess)
+    guess = [XB_inv, XC_inv]
+    sol, success = binary_equilibrium(P=P, T=T, phase_A=liq, phase_B=B2, guess=guess)
     if success:
         Ts.append(T)
-        x_As.append(sol[0])
-        x_Bs.append(sol[1])
-        
-       
-        
+        x_As.append(1-sol[0])
+        x_Bs.append(1-sol[1])
+
+
 for T1 in temperatures1:
-    guess = [0.3, 0.7]
+    guess = [XA_inv, XB_inv]
     sol1, success = binary_equilibrium(P=P, T=T1, phase_A=fcc, phase_B=liq, guess=guess)
     if success:
         T1s.append(T1)
-        x_Cs.append(sol1[0])
-        x_Ds.append(sol1[1])   
+        x_Cs.append(1-sol1[0])
+        x_Ds.append(1-sol1[1])   
         
         
-
+plt.ylabel('Temperature (K)')
+plt.xlabel('Si content (mol%)')
 plt.plot(x_As, Ts,color='blue')
 plt.plot(x_Bs, Ts,color='blue')
 plt.plot(x_Cs, T1s,color='red')
 plt.plot(x_Ds, T1s,color='red')
-plt.scatter(XC_inv,T_inv)
+plt.scatter(1-XA_inv,T_inv,color='red')
+plt.scatter(1-XB_inv,T_inv,color='blue')
+plt.scatter(1-XC_inv,T_inv,color='green')
 plt.show()
 
+print(T_inv)
 
-#trying to plot the eutectic in T-X space
+
+# In[52]:
+
+
+#trying to plot the eutectic in T-X space, i get an assertion error on the composition guess even though they add up to 1
 
 pressures = np.linspace(1, 330e9, 101)
-guess1 = [500,0.25,0.25,0.5]
+guess2 = [1000,0.25,0.5,0.25]
 
 T_inv = []
 XA_inv = []
@@ -110,11 +99,22 @@ XC_inv = []
 
 
 for P in pressures:
-    TX_inv, success = ternary_equilibrium_constant_P(P=P, phase_A=fcc, phase_B=B2, phase_C=liq, guess=guess1)
+    TX_inv, success = ternary_equilibrium_constant_P(P=P, phase_A=fcc, phase_B=B2, phase_C=liq, guess=guess2)
     if success:
         T_inv.append(TX_inv[0])
         XA_inv.append(TX_inv[1])
         XB_inv.append(TX_inv[2])
         XC_inv.append(TX_inv[3])
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
 
 
