@@ -48,22 +48,33 @@ def binary_equilibrium(P, T, phase_A, phase_B, guess):
     (composition of A, composition of B) and two equations
     (the chemical potentials of Fe and Si must be the same in both phases)
     """
+    phases = [phase_A, phase_B]
     def affinities(args):
-        x_A, x_B = args
-        for phase in [phase_A, phase_B]:
-            phase.set_state(P, T)
+        cargs = args
+        mu = []
+        for i, ph in enumerate(phases):
+            # Set state and composition
+            ph.set_state(P, T)
+            ph.set_composition([cargs[i], 1.-cargs[i]])
 
-        phase_A.set_composition([x_A, 1.-x_A])
-        phase_B.set_composition([x_B, 1.-x_B])
+            # Calculate the chemical potentials of Fe and Si
+            if ph.name == 'B2-ordered bcc Fe-Si':  # Fe and Fe0.5Si0.5
+                pgs = ph.partial_gibbs
+                mu.append([pgs[0], 2.*pgs[1] - pgs[0]])
+            elif (('fcc' in ph.name) or ('hcp' in ph.name) or ('liq' in ph.name)):
+                mu.append(ph.partial_gibbs)
+            else:
+                raise Exception('Phase not recognised')
 
-        mu_A = phase_A.partial_gibbs
-        mu_B = phase_B.partial_gibbs
-
-        return np.array([mu_A[0] - mu_B[0],
-                         mu_A[1] - mu_B[1]])
+        return np.array([mu[0][0] - mu[1][0],
+                         mu[0][1] - mu[1][1]])
 
     sol = root(affinities, guess)
-    return sol.x, sol.success
+    vals = np.array(sol.x)
+    for i, ph in enumerate(phases):
+        if ph.name == 'B2-ordered bcc Fe-Si':
+            vals[i] = 0.5 + 0.5*sol.x[i]
+    return vals, sol.success
 
 def ternary_equilibrium_constant_P(P, phase_A, phase_B, phase_C, guess):
     """
@@ -72,23 +83,35 @@ def ternary_equilibrium_constant_P(P, phase_A, phase_B, phase_C, guess):
     and four corresponding equations
     (the chemical potentials of Fe and Si must be the same in all three phases).
     """
+
+    phases = [phase_A, phase_B, phase_C]
     def affinities(args):
-        T, x_A, x_B, x_C = args
-        for phase in [phase_A, phase_B, phase_C]:
-            phase.set_state(P, T)
+        T = args[0]
+        cargs = args[1:]
+        mu = []
+        for i, ph in enumerate(phases):
+            # Set state and composition
+            ph.set_state(P, T)
+            ph.set_composition([cargs[i], 1.-cargs[i]])
 
-        phase_A.set_composition([x_A, 1.-x_A])
-        phase_B.set_composition([x_B, 1.-x_B])
-        phase_B.set_composition([x_C, 1.-x_C])
+            # Calculate the chemical potentials of Fe and Si
+            if ph.name == 'B2-ordered bcc Fe-Si':  # Fe and Fe0.5Si0.5
+                pgs = ph.partial_gibbs
+                mu.append([pgs[0], 2.*pgs[1] - pgs[0]])
+            elif (('fcc' in ph.name) or ('hcp' in ph.name) or ('liq' in ph.name)):
+                mu.append(ph.partial_gibbs)
+            else:
+                raise Exception('Phase not recognised')
 
-        mu_A = phase_A.partial_gibbs
-        mu_B = phase_B.partial_gibbs
-        mu_C = phase_C.partial_gibbs
-
-        return np.array([mu_A[0] - mu_B[0],
-                         mu_A[1] - mu_B[1],
-                         mu_A[0] - mu_C[0],
-                         mu_A[1] - mu_C[1]])
+        return np.array([mu[0][0] - mu[1][0],
+                         mu[0][1] - mu[1][1],
+                         mu[0][0] - mu[2][0],
+                         mu[0][1] - mu[2][1]])
 
     sol = root(affinities, guess)
-    return sol.x, sol.success
+
+    vals = np.array(sol.x)
+    for i, ph in enumerate(phases):
+        if ph.name == 'B2-ordered bcc Fe-Si':
+            vals[i+1] = 0.5 + 0.5*sol.x[i+1]
+    return vals, sol.success
