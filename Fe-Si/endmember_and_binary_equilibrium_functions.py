@@ -48,10 +48,11 @@ def binary_equilibrium(P, T, phase_A, phase_B, guess):
     (composition of A, composition of B) and two equations
     (the chemical potentials of Fe and Si must be the same in both phases)
     """
+    phases = [phase_A, phase_B]
     def affinities(args):
         cargs = args
         mu = []
-        for i, ph in enumerate([phase_A, phase_B]):
+        for i, ph in enumerate(phases):
             # Set state and composition
             ph.set_state(P, T)
             ph.set_composition([cargs[i], 1.-cargs[i]])
@@ -69,7 +70,11 @@ def binary_equilibrium(P, T, phase_A, phase_B, guess):
                          mu[0][1] - mu[1][1]])
 
     sol = root(affinities, guess)
-    return sol.x, sol.success
+    vals = np.array(sol.x)
+    for i, ph in enumerate(phases):
+        if ph.name == 'B2-ordered bcc Fe-Si':
+            vals[i] = 0.5 + 0.5*sol.x[i]
+    return vals, sol.success
 
 def ternary_equilibrium_constant_P(P, phase_A, phase_B, phase_C, guess):
     """
@@ -78,11 +83,13 @@ def ternary_equilibrium_constant_P(P, phase_A, phase_B, phase_C, guess):
     and four corresponding equations
     (the chemical potentials of Fe and Si must be the same in all three phases).
     """
+
+    phases = [phase_A, phase_B, phase_C]
     def affinities(args):
         T = args[0]
         cargs = args[1:]
         mu = []
-        for i, ph in enumerate([phase_A, phase_B, phase_C]):
+        for i, ph in enumerate(phases):
             # Set state and composition
             ph.set_state(P, T)
             ph.set_composition([cargs[i], 1.-cargs[i]])
@@ -102,4 +109,9 @@ def ternary_equilibrium_constant_P(P, phase_A, phase_B, phase_C, guess):
                          mu[0][1] - mu[2][1]])
 
     sol = root(affinities, guess)
-    return sol.x, sol.success
+
+    vals = np.array(sol.x)
+    for i, ph in enumerate(phases):
+        if ph.name == 'B2-ordered bcc Fe-Si':
+            vals[i+1] = 0.5 + 0.5*sol.x[i+1]
+    return vals, sol.success
