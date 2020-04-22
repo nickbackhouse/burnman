@@ -1,6 +1,3 @@
-
-
-
 from __future__ import absolute_import
 from __future__ import print_function
 
@@ -26,39 +23,12 @@ from endmember_and_binary_equilibrium_functions import *
 from fe_si_experimental_equilibria import *
 
 
-def invariant_point(P, phase_A, phase_B, phase_C, guess):
-    """
-    for the invariant point in a binary system we have to output three compositions and the temperature
-    """
-    def affinities(args):
-        T, x_A, x_B, x_C = args
-        for phase in [phase_A, phase_B, phase_C]:
-            phase.set_state(P, T)
-
-        phase_A.set_composition([x_A, 1.-x_A])
-        phase_B.set_composition([x_B, 1.-x_B])
-        phase_C.set_composition([x_C, 1.-x_C])
-
-        mu_A = phase_A.partial_gibbs
-        mu_B = phase_B.partial_gibbs
-        mu_C = phase_C.partial_gibbs
-
-        return np.array([mu_A[0] - mu_B[0],
-                         mu_A[1] - mu_B[1],
-                         mu_A[0] - mu_C[0],
-                         mu_A[1] - mu_C[1]])
-
-
-    sol = root(affinities, guess)
-    return sol.x, sol.success
 
 
 
-
-#I've managed to make it output three compositions and a temperature (the function I now realise is exactly the same as the ternary_equilibrium function but nevermind!) but I dont believe the temperature its outputting (590K)
-
+P = 50.e9
 guess1 = [3000,0.25,0.25,0.5]
-TX_inv, success = invariant_point(P=50.e9, phase_A=fcc, phase_B=hcp, phase_C=liq, guess=guess1)
+TX_inv, success = ternary_equilibrium_constant_P(P=P, phase_A=fcc, phase_B=B2, phase_C=liq, guess=guess1)
 
 T_inv = TX_inv[0]
 XA_inv = TX_inv[1]
@@ -68,7 +38,6 @@ XC_inv = TX_inv[3]
 
 temperatures = np.linspace(1000, 5000., 101)
 temperatures1 = np.linspace(1000., 5000., 101)
-P = 50.e9
 Ts = []
 T1s = []
 x_As = []
@@ -78,7 +47,7 @@ x_Ds = []
 
 for T in temperatures:
     guess = [0.5, 0.5]
-    sol, success = binary_equilibrium(P=P, T=T, phase_A=liq, phase_B=hcp, guess=guess)
+    sol, success = binary_equilibrium(P=P, T=T, phase_A=B2, phase_B=liq, guess=guess)
     if success:
         Ts.append(T)
         x_As.append(sol[0])
@@ -94,8 +63,37 @@ for T1 in temperatures1:
         x_Cs.append(sol1[0])
         x_Ds.append(sol1[1])        
 
-plt.plot(x_As, Ts)
-plt.plot(x_Bs, Ts)
-plt.plot(x_Cs, T1s)
-plt.plot(x_Ds, T1s)
+plt.plot(x_As, Ts,color='blue')
+plt.plot(x_Bs, Ts,color='blue')
+plt.plot(x_Cs, T1s,color='red')
+plt.plot(x_Ds, T1s,color='red')
 plt.show()
+
+plt.scatter(XA_inv,T_inv)
+plt.scatter(XB_inv,T_inv)
+plt.scatter(XC_inv,T_inv)
+
+print(XA_inv)
+print(XB_inv)
+print(XC_inv)
+print(T_inv)
+
+#trying to plot the eutectic in T-X space, I get assertion errors
+
+pressures = np.linspace(1, 330e9, 101)
+guess1 = [3000,0.25,0.25,0.5]
+
+T_inv = []
+XA_inv = []
+XB_inv = []
+XC_inv = []
+
+
+for P in pressures:
+    TX_inv, success = ternary_equilibrium_constant_P(P=P, phase_A=fcc, phase_B=B2, phase_C=liq, guess=guess1)
+    if success:
+        T_inv.append(TX_inv[0])
+        XA_inv.append(TX_inv[1])
+        XB_inv.append(TX_inv[2])
+        XC_inv.append(TX_inv[3])
+
