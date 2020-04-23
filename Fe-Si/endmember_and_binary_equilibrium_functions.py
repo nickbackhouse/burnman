@@ -13,6 +13,22 @@ if not os.path.exists('burnman') and os.path.exists('../burnman'):
 import burnman
 import burnman.minerals as minerals
 
+def invariant_point(endmember_A, endmember_B, endmember_C, P_guess, T_guess):
+    """
+    For isochemical endmember calculations at fixed P or T,
+    we have one unknown (T or P) and one equation
+    (the gibbs free energies of the two phases must be equal).
+    """
+    def affinity(args):
+        P, T = args
+        for phase in [endmember_A, endmember_B, endmember_C]:
+            phase.set_state(P, T)
+        return [endmember_A.gibbs - endmember_B.gibbs,
+                endmember_A.gibbs - endmember_C.gibbs]
+
+    sol = root(affinity, [P_guess, T_guess])
+    return sol.x, sol.success
+
 def endmember_equilibrium_constant_P(P, endmember_A, endmember_B, T_guess):
     """
     For isochemical endmember calculations at fixed P or T,
@@ -21,7 +37,7 @@ def endmember_equilibrium_constant_P(P, endmember_A, endmember_B, T_guess):
     """
     def affinity(T):
         for phase in [endmember_A, endmember_B]:
-            phase.set_state(P, T)
+            phase.set_state(P, T[0])
         return endmember_A.gibbs - endmember_B.gibbs
 
     sol = root(affinity, T_guess)
@@ -35,7 +51,7 @@ def endmember_equilibrium_constant_T(T, endmember_A, endmember_B, P_guess):
     """
     def affinity(P):
         for phase in [endmember_A, endmember_B]:
-            phase.set_state(P, T)
+            phase.set_state(P[0], T)
         return endmember_A.gibbs - endmember_B.gibbs
 
     sol = root(affinity, P_guess)

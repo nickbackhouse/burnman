@@ -60,7 +60,9 @@ solution_args = [['B2_fe_si', 'E', 0, 0, solutions['B2_fe_si'].energy_interactio
                  ['fcc_fe_si', 'E', 0, 0, solutions['fcc_fe_si'].energy_interaction[0][0], 1.e3],
                  ['fcc_fe_si', 'V', 0, 0, solutions['fcc_fe_si'].volume_interaction[0][0], 1.e-8],
                  ['hcp_fe_si', 'E', 0, 0, solutions['hcp_fe_si'].energy_interaction[0][0], 1.e3],
-                 ['hcp_fe_si', 'V', 0, 0, solutions['hcp_fe_si'].volume_interaction[0][0], 1.e-8]]
+                 ['hcp_fe_si', 'V', 0, 0, solutions['hcp_fe_si'].volume_interaction[0][0], 1.e-8],
+                 ['liq_fe_si', 'E', 0, 0, solutions['liq_fe_si'].energy_interaction[0][0], 1.e3],
+                 ['liq_fe_si', 'V', 0, 0, solutions['liq_fe_si'].volume_interaction[0][0], 1.e-8]]
 
 """
 Here are lists of Gaussian priors for the parameters we're trying to fit
