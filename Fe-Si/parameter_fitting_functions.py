@@ -132,7 +132,9 @@ def set_params(args, dataset, storage, special_constraint_function):
     return None
 
 
-def minimize_func(params, dataset, storage, special_constraint_function, verbose=False):
+def minimize_func(params, dataset, storage, special_constraint_function,
+                  verbose=False,
+                  return_misfits=False):
     # Set parameters
     set_params(params, dataset, storage,
                special_constraint_function=special_constraint_function)
@@ -222,10 +224,17 @@ def minimize_func(params, dataset, storage, special_constraint_function, verbose
         print(param_list_to_string(params))
         print('RMS misfit: {0}'.format(np.sqrt(half_sqr_misfit)))
 
-    if np.isnan(half_sqr_misfit) or not np.isfinite(half_sqr_misfit):
-        return np.inf  # catch for if one or more EoSes fail
+    if return_misfits == False:
+        if np.isnan(half_sqr_misfit) or not np.isfinite(half_sqr_misfit):
+            return np.inf  # catch for if one or more EoSes fail
+        else:
+            return half_sqr_misfit
     else:
-        return half_sqr_misfit
+        if np.isnan(half_sqr_misfit) or not np.isfinite(half_sqr_misfit):
+            return np.inf  # catch for if one or more EoSes fail
+        else:
+            return np.sqrt(chisqr)
+
 
 
 def log_probability(params, dataset, storage, special_constraint_function):
